@@ -1,0 +1,40 @@
+﻿@model TabloidMVC.Models.Post
+
+@{
+    ViewData["Title"] = $"Post - {Model.Title}";
+}
+
+<div class="container pt-5">
+    <div class="post">
+        <section class="px-3">
+            <div class="row justify-content-between">
+                <h1 class="text-secondary">@Model.Title</h1>
+                <h1 class="text-black-50">@Model.Category.Name</h1>
+            </div>
+            <div class="row justify-content-between">
+                <p class="text-secondary">Written by @Model.UserProfile.DisplayName</p>
+                <p class="text-black-50">Published on @Html.DisplayFor(model => model.PublishDateTime)</p>
+            </div>
+            <div class="row">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Edit">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Delete">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </div>
+        </section>
+        <hr />
+        @if (!string.IsNullOrWhiteSpace(Model.ImageLocation))
+        {
+            <section class="row justify-content-center">
+                <div>
+                    <img src="@Model.ImageLocation" />
+                </div>
+            </section>
+        }
+        <section class="row post__content">
+            <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Content)</p>
+        </section>
+    </div>
+</div>

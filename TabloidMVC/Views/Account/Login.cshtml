@@ -1,0 +1,32 @@
+﻿@model TabloidMVC.Models.Credentials
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+    <div class="container pt-5">
+        <div class="row justify-content-center">
+            <div class="card col-sm-12 col-md-6 col-lg-4">
+                <h1 class="text-center" style="font-size: 100px">
+                    <i class="fas fa-user-circle text-primary"></i>
+                </h1>
+                <div class="card-body">
+                    <h2 class="card-title text-center text-secondary">Login</h2>
+                    <form asp-action="Login">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <input placeholder="Email" asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="SUBMIT" class="btn btn-primary btn-block" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

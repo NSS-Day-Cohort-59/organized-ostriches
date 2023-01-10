@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<header class="masthead bg-primary text-white text-center">
+    <div class="container d-flex align-items-center flex-column">
+        <img class="masthead-avatar mb-2" src="~/assets/logo_transparent.png" alt="">
+        <div class="divider-custom divider-light">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+            <div class="divider-custom-line"></div>
+        </div>
+        <h2 class="pre-wrap masthead-subheading font-weight-light mb-0">BLOGS & JOURNALS</h2>
+    </div>
+</header>
+
+<div class="text-center container mt-5">
+    <h2 class="page-section-heading text-secondary d-inline-block mb-0">GET STARTED</h2>
+    <!-- Icon Divider-->
+    <div class="divider-custom">
+        <div class="divider-custom-line"></div>
+        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+        <div class="divider-custom-line"></div>
+    </div>
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <div class="row justify-content-center">
+            <a class="btn btn-primary btn-lg" asp-controller="account" asp-action="login">LOGIN</a>
+        </div>
+    }
+</div>
