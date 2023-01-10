@@ -43,15 +43,17 @@ namespace TabloidMVC.Controllers
         // POST: CommentsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Comment comment)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _commentRepo.AddComment(comment);
+
+                return RedirectToAction("Index");
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                return View(comment);
             }
         }
 

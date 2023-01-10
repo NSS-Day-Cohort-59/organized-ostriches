@@ -10,7 +10,8 @@ namespace TabloidMVC.Repositories
     public List<Comment> GetAllComments();
 
     public List<Comment> GetCommentsByPostId(int PostId);
-    }
+    
+    
         
 }
 
