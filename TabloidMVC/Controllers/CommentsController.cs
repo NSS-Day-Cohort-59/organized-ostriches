@@ -6,6 +6,7 @@ using TabloidMVC.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Security.Claims;
 
 namespace TabloidMVC.Controllers
 {
@@ -23,7 +24,7 @@ namespace TabloidMVC.Controllers
         // GET: CommentsController
         public ActionResult Index(int postId)
         {
-            List<Comment> comments = _commentRepo.GetCommentsByPostId(postId);
+            List<Comment> comments = _commentRepo.GetAllComments();
 
             return View(comments);
         }
@@ -47,8 +48,11 @@ namespace TabloidMVC.Controllers
         {
             try
             {
-                comment.PostId = 1;
-                comment.UserProfileId = 1;
+                
+                comment.CreateDateTime = DateTime.Now;
+                comment.UserProfileId = GetCurrentUserProfileId();
+                comment.PostId = 1; 
+
                 _commentRepo.AddComment(comment);
 
                 return RedirectToAction("Index");
@@ -100,5 +104,13 @@ namespace TabloidMVC.Controllers
                 return View();
             }
         }
+
+        private int GetCurrentUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
+        }
+
+       
     }
 }
