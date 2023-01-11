@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
 
@@ -31,6 +32,81 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return categories;
+                }
+            }
+        }
+
+        public void AddCategory(Category category)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                    INSERT INTO Category (Name)
+                    OUTPUT INSERTED.ID
+                    Values(@name)";
+
+                    cmd.Parameters.AddWithValue("@name", category.Name);
+
+                    int id = (int)cmd.ExecuteScalar();
+
+                    category.Id = id;
+                }
+            }
+        }
+
+        public Category GetCategoryById(int id) 
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        Select Id, Name
+                        From Category
+                        WHERE Id = @id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader()) 
+                    {
+                        if (reader.Read())
+                        {
+                            Category category = new Category
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Name = reader.GetString(reader.GetOrdinal("Name"))
+                            };
+                            return category;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void DeleteCategory (int categoryId) 
+        { 
+            using (SqlConnection conn = Connection) 
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        Delete From Category
+                        Where Id = @id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@id", categoryId);
+
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
