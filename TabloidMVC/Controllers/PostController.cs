@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
+using System.Collections.Generic;
+using System;
 using System.Security.Claims;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
+using TabloidMVC.Models;
 
 namespace TabloidMVC.Controllers
 {
@@ -32,7 +35,7 @@ namespace TabloidMVC.Controllers
             if (post == null)
             {
                 int userId = GetCurrentUserProfileId();
-                post = _postRepository.GetUserPostById(id, userId);
+                post = _postRepository.GetUserPostById(id);
                 if (post == null)
                 {
                     return NotFound();
@@ -67,6 +70,37 @@ namespace TabloidMVC.Controllers
                 return View(vm);
             }
         }
+
+        // GET: Posts/Edit/5
+        public ActionResult Edit(int id)
+        {
+            List<Category> categories = _categoryRepository.GetAll();
+
+            PostFormViewModel vm = new PostFormViewModel()
+            {
+                Post = _postRepository.GetUserPostById(id),
+                Categories = categories
+            };
+
+            return View(vm);
+        }
+
+        // POST: Posts/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, PostFormViewModel vm) 
+        {
+            try
+            {
+                _postRepository.UpdatePost(vm.Post);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(vm);
+            }
+        } 
 
         private int GetCurrentUserProfileId()
         {
