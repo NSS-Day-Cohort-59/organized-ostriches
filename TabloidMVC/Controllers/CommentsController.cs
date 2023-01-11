@@ -47,6 +47,8 @@ namespace TabloidMVC.Controllers
         {
             try
             {
+                comment.PostId = 1;
+                comment.UserProfileId = 1;
                 _commentRepo.AddComment(comment);
 
                 return RedirectToAction("Index");
