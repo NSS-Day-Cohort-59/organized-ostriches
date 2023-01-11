@@ -6,11 +6,14 @@ using System.Collections.Generic;
 namespace TabloidMVC.Repositories
 {
     public interface ICommentRepository
-    { 
-    public List<Comment> GetAllComments();
+    {
+        public List<Comment> GetAllComments();
 
-    public List<Comment> GetCommentsByPostId(int PostId);
+        public List<Comment> GetCommentsByPostId(int PostId);
+
+        void AddComment(Comment comment);
     }
+    
         
 }
 
