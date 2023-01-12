@@ -58,7 +58,7 @@ namespace TabloidMVC.Repositories
 
             }
         }
-        public List<Comment> GetCommentsByPostId(int PostId)
+        public List<Comment> GetCommentsByPostId(int PostId) //Need a link for comments in post details view?
         {
             using (SqlConnection conn = Connection)
             {
