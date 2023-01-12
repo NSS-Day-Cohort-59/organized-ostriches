@@ -1,0 +1,71 @@
+﻿@model TabloidMVC.Models.ViewModels.PostFormViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Post</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Post.Id" type="hidden" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Post.Title" class="control-label"></label>
+                <input asp-for="Post.Title" class="form-control" />
+                <span asp-validation-for="Post.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Post.Content" class="control-label"></label>
+                <input asp-for="Post.Content" class="form-control" />
+                <span asp-validation-for="Post.Content" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Post.ImageLocation" class="control-label"></label>
+                <input asp-for="Post.ImageLocation" class="form-control" />
+                <span asp-validation-for="Post.ImageLocation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Post.CreateDateTime" type="hidden" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Post.PublishDateTime" class="control-label"></label>
+                <input asp-for="Post.PublishDateTime" class="form-control" />
+                <span asp-validation-for="Post.PublishDateTime" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <input asp-for="Post.UserProfileId" type="hidden" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Post.CategoryId" class="control-label"></label>
+                <select asp-for="Post.CategoryId" class="form-control">
+                <option value="">Select Category</option>
+                @foreach (Category category in Model.Categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+                </select>
+                <span asp-validation-for="Post.CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Post.UserProfileId" type="hidden" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

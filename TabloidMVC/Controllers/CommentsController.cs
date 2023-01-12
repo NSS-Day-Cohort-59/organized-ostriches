@@ -22,9 +22,9 @@ namespace TabloidMVC.Controllers
 
 
         // GET: CommentsController
-        public ActionResult Index(int postId)
+        public ActionResult Index(int id)
         {
-            List<Comment> comments = _commentRepo.GetAllComments();
+            List<Comment> comments = _commentRepo.GetCommentsByPostId(id); 
 
             return View(comments);
         }
@@ -36,22 +36,24 @@ namespace TabloidMVC.Controllers
         }
 
         // GET: CommentsController/Create
-        public ActionResult Create()
+        public ActionResult Create(int postId)
         {
-            return View();
+            Comment comment = new Comment();
+            comment.PostId = postId;
+            return View(comment);
         }
 
         // POST: CommentsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Comment comment)
+        public ActionResult Create(int postId, Comment comment)
         {
             try
             {
                 
                 comment.CreateDateTime = DateTime.Now;
-                comment.UserProfileId = GetCurrentUserProfileId();
-                comment.PostId = 1; 
+                comment.UserProfileId = GetCurrentUserProfileId();  //THANKS REBEKA!
+                comment.PostId = postId; 
 
                 _commentRepo.AddComment(comment);
 
