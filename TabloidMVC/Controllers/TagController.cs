@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using System.Security.Claims;
+using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
@@ -40,19 +41,21 @@ namespace TabloidMVC.Controllers
         }
 
         // POST: TagController/Create
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // public ActionResult Create(IFormCollection collection)
-        // {
-            // try
-            // {
-                // return RedirectToAction(nameof(Index));
-            // }
-            // catch
-            // {
-                // return View();
-            // }
-        // }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Tag tag)
+        {
+            try
+            {
+                _tagRepository.Add(tag);
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View(tag);
+             }
+         }
 
         // GET: TagController/Edit/5
         public ActionResult Edit(int id)
