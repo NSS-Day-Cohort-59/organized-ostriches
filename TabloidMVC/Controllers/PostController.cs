@@ -100,7 +100,27 @@ namespace TabloidMVC.Controllers
             {
                 return View(vm);
             }
-        } 
+        }
+
+        public IActionResult Delete(int id)
+        {
+            Post post = _postRepository.GetUserPostById(id);
+
+            return View(post);
+        }
+        [HttpPost]
+        public ActionResult Delete(int id, Post post)
+        {
+            try
+            {
+                _postRepository.DeletePost(id);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(post);
+            }
+        }
 
         private int GetCurrentUserProfileId()
         {
