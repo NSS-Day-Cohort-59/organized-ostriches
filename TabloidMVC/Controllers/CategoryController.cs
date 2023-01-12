@@ -68,5 +68,43 @@ namespace TabloidMVC.Controllers
             }
         }
 
+        public ActionResult Edit(int id) 
+        {
+            Category category = _categoryRepository.GetCategoryById(id);
+
+            if (category == null) 
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int id, Category category) 
+        {
+            try
+            {
+                _categoryRepository.EditCategory(category);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex) 
+            {
+                return View(category);
+            }
+        }
+
+        public ActionResult Details(int id) 
+        {
+            Category category = _categoryRepository.GetCategoryById(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+
+        }
+
     }
 }
