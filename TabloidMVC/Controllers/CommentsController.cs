@@ -95,23 +95,29 @@ namespace TabloidMVC.Controllers
         }
 
         // GET: CommentsController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id, int postId)
         {
-            return View();
+            Comment comment = _commentRepo.GetCommentById(id);
+             
+            return View(comment);
         }
 
         // POST: CommentsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Comment comment)
+        public ActionResult Delete(int id)
         {
+                Comment comment = _commentRepo.GetCommentById(id);
+            
             try
             {
-                return RedirectToAction(nameof(Index));
+               
+                _commentRepo.DeleteComment(id);
+                return RedirectToAction("Index", new { id = comment.PostId }); ;
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(comment);
             }
         }
 
