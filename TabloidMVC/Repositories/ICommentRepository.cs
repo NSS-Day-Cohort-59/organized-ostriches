@@ -9,7 +9,7 @@ namespace TabloidMVC.Repositories
     {
         public List<Comment> GetAllComments();
 
-        public List<Comment> GetCommentsByPostId(int PostId);
+        public List<Comment> GetCommentsByPostId(int postId);
 
         void AddComment(Comment comment);
     }

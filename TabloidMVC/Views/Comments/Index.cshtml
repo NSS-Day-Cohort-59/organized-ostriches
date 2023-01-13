@@ -6,9 +6,17 @@
 
 <h1>Index</h1>
 
+
+@* asp-route-postid is assigned the ViewData dictionary object, "PostId." PostId was assigned its value in the Index method of CommentsController  *@
 <p>
-    <a asp-action="Create">Create New</a>
+   <a asp-action="Create" asp-controller="Comments" asp-route-postid="@ViewData["PostId"]" class="btn btn-outline-primary mx-1" title="Delete">  
+                   Add Comment
+                </a>
 </p>
+
+
+
+
 <table class="table">
     <thead>
         <tr>
