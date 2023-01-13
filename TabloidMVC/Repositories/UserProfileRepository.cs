@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
@@ -90,6 +91,53 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return users;
+                }
+            }
+        }
+
+        public UserProfile GetUserById(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        Select UserProfile.Id, DisplayName, FirstName, LastName, Email, CreateDateTime, ImageLocation, Name
+                        From UserProfile
+                        Left Join UserType
+                        on UserTypeId = UserType.Id
+                        WHERE UserProfile.Id = @id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        var user = new UserProfile();
+
+                        if (reader.Read())
+                        {
+                            user = new UserProfile
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                                
+                                UserType = new UserType
+                                {
+                                    Name = reader.GetString(reader.GetOrdinal("Name")),
+                                }
+
+                            };
+                            return user;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
                 }
             }
         }
