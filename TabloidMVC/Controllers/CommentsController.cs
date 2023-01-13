@@ -24,6 +24,11 @@ namespace TabloidMVC.Controllers
         // GET: CommentsController
         public ActionResult Index(int id)
         {
+            // ViewData is a dictionary of objects that are stored and retrieved using strings as keys; used to transfer data from Controller to View. Since ViewData is a dictionary,
+            // each key must be a string. ViewData only transfers data from controller to view, not vice-versa. It is valid only during the current request. 
+            // Here, "PostId" is the key string, and assigned the value of "id", which was passed into index as a parameter.
+            ViewData["PostId"] = id;   
+
             List<Comment> comments = _commentRepo.GetCommentsByPostId(id); 
 
             return View(comments);
@@ -57,7 +62,10 @@ namespace TabloidMVC.Controllers
 
                 _commentRepo.AddComment(comment);
 
-                return RedirectToAction("Index");
+                // Redirects to the specified action using the action name and route values.
+                // Here, the action name is "Index," and the route value is id, 
+                // assigned the value of postId, which was passed as a parameter to the Create method.
+                return RedirectToAction("Index", new { id = postId }); 
             }
             catch(Exception ex)
             {
@@ -74,7 +82,7 @@ namespace TabloidMVC.Controllers
         // POST: CommentsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Comment comment)
         {
             try
             {
@@ -95,7 +103,7 @@ namespace TabloidMVC.Controllers
         // POST: CommentsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Comment comment)
         {
             try
             {
