@@ -58,7 +58,55 @@ namespace TabloidMVC.Repositories
 
             }
         }
-        public List<Comment> GetCommentsByPostId(int PostId) //Need a link for comments in post details view?
+
+        public Comment GetCommentById(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                { 
+                    cmd.CommandText = @"
+                        SELECT Id, PostId, UserProfileId, Subject, Content, CreateDateTime
+                        FROM Comment
+                        WHERE Id = @Id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@Id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        if (reader.Read())
+                        {
+
+                            Comment comment = new Comment
+                            {
+
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
+                                UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+                                Subject = reader.GetString(reader.GetOrdinal("Subject")),
+                                Content = reader.GetString(reader.GetOrdinal("Content")),
+                                CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                            };
+
+
+
+                            return comment;
+                        }
+                        else { 
+                            return null; 
+                        }
+
+                    }
+                }
+            }
+        }
+
+
+
+        public List<Comment> GetCommentsByPostId(int PostId) 
         {
             using (SqlConnection conn = Connection)
             {
@@ -128,6 +176,25 @@ namespace TabloidMVC.Repositories
                 
                     comment.Id = id;
 
+                }
+            }
+        }
+
+        public void DeleteComment(int commentId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        DELETE FROM Comment  
+                        WHERE Id = @id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@id", commentId);
+                    
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
