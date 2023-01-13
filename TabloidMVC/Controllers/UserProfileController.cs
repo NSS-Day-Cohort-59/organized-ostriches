@@ -37,5 +37,26 @@ namespace TabloidMVC.Controllers
             return View(user);
 
         }
+
+        public IActionResult Delete(int id)
+        {
+            UserProfile user = _userProfileRepository.GetUserById(id);
+            
+            return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id, UserProfile userProfile) 
+        {
+            try
+            {
+                _userProfileRepository.DeleteUserProfile(id);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex) 
+            {
+                return View(userProfile);
+            }
+        }
     }
 }

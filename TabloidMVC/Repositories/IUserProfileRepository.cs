@@ -9,6 +9,8 @@ namespace TabloidMVC.Repositories
         public List<UserProfile> GetAll();
 
         public UserProfile GetUserById(int id);
+
+        public void DeleteUserProfile(int userprofileId);
     }
 
 

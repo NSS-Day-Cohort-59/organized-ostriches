@@ -20,7 +20,7 @@ namespace TabloidMVC.Repositories
                     cmd.CommandText = @"
                        SELECT u.id, u.FirstName, u.LastName, u.DisplayName, u.Email,
                               u.CreateDateTime, u.ImageLocation, u.UserTypeId,
-                              ut.[Name] AS UserTypeName
+                              ut.[Name] AS UserTypeName, u.isActive
                          FROM UserProfile u
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
                         WHERE email = @email";
@@ -46,6 +46,7 @@ namespace TabloidMVC.Repositories
                                 Id = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
                                 Name = reader.GetString(reader.GetOrdinal("UserTypeName"))
                             },
+                            IsActive = reader.GetBoolean(reader.GetOrdinal("isActive")),
                         };
                     }
 
@@ -67,6 +68,7 @@ namespace TabloidMVC.Repositories
                         From UserProfile
                         left join UserType 
                         on UserTypeId = UserType.Id
+                        Where isActive = 1
                         Order by DisplayName";
                     var reader = cmd.ExecuteReader();
 
@@ -138,6 +140,26 @@ namespace TabloidMVC.Repositories
                             return null;
                         }
                     }
+                }
+            }
+        }
+
+        public void DeleteUserProfile (int userprofileId)
+        {
+            using (SqlConnection conn = Connection) 
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE UserProfile
+                        SET isActive = 0
+                        Where Id = @id
+                        ";
+                    
+                    cmd.Parameters.AddWithValue("@id", userprofileId);
+
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
